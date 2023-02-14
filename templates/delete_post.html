@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <h1>Delete post</h1>
+    <p>Are you sure you want to DELETE post {{post.title}}?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button class="btn btn-danger">Delete post</button>
+        <a class="btn btn-info" href="{% url 'detail_post' post.pk %}">Chancel</a>
+    </form>
+{% endblock %}

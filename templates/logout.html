@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h4>You are logged out</h4>
+    <small class="text-nuted">
+        Do you want to come back? <a class="btn btn-outline-success" href="{% url 'login' %}">Log In</a>
+    </small>    
+{% endblock %}
