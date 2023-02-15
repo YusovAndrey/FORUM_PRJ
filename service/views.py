@@ -1,16 +1,19 @@
-from django.shortcuts import render, redirect
+import email
+from forum_prj.settings import EMAIL_HOST
 from service.models import Post, Comment
+from .forms import PostForm, CommentForm, UserRegisterForm, MessageForm
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView 
-from .forms import PostForm, CommentForm, UserRegisterForm
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-
-def test_func(user):
-    return user.email.endswith('@mail.com')
+from django.core.mail import send_mail
+from django.conf import settings
+#def test_func(user):
+#    return user.email.endswith('@mail.com')
 
 def index(req):
     return render(req, 'index.html')
@@ -18,10 +21,22 @@ def index(req):
 #@login_required
 #@permission_required('user.view_user', raise_exception=True)
 
-@user_passes_test(test_func)
+#@user_passes_test(test_func)
 def about(req):
-    return render(req, 'about.html')
-
+    form = MessageForm()
+    if req.method == "POST":
+        form = MessageForm(req.POST)
+        if form.is_valid():
+            subject = form.cleaned_data.get("title")
+            body = form.cleaned_data.get("body")
+            try:
+                send_mail(subject, body, settings.EMAIL_HOST_USER, ["dajebel900@aosod.com"], fail_silently=False)
+                form.save()
+            except Exception as err:
+                print(str(err))
+            return redirect('about')
+    return render(req, "about.html", {"form":form})
+            
 
 class PostsView(ListView):
     model = Post
@@ -40,6 +55,7 @@ class DetailPostView(DetailView):
 
 @login_required
 @permission_required("service.add_post")
+
 def create_post(req):
     form = PostForm
     if req.method == "POST":
