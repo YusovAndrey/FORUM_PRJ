@@ -1,17 +1,24 @@
-import email
-from forum_prj.settings import EMAIL_HOST
-from service.models import Post, Comment
-from .forms import PostForm, CommentForm, UserRegisterForm, MessageForm
-from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView 
+import csv
+import datetime
+
 from django.shortcuts import render, redirect
+from django.conf import settings
+from http.client import HTTPResponse
+from service.models import Post, Comment
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView 
+from .forms import PostForm, CommentForm, UserRegisterForm, MessageForm
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from importlib.resources import contents
+from forum_prj.settings import EMAIL_HOST
+from django.contrib.auth.forms import UserCreationForm
+
 #def test_func(user):
 #    return user.email.endswith('@mail.com')
 
@@ -97,3 +104,21 @@ class RegisterForm(SuccessMessageMixin, CreateView):
     template_name = 'register.html'
     success_url = reverse_lazy('login')
 
+def upload(req):
+    context = {}
+    if req.method == "POST":
+        uploaded_file = req.FILES['file']
+        file = FileSystemStorage()
+        name = file.save(uploaded_file.name, uploaded_file)
+        context['url'] = file.url(name)
+    return render(req, "upload.html", context)
+
+def download(req):
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(["Title", "Description", "Created_at"])
+    for row in Post.objects.all().values_list('title', 'description', 'created_at'):
+        writer.writerow(row)
+    filename = str(datetime.datetime.now()) + 'posts.csv'
+    response["Content-Disposition"] = f"attachment; filename={filename}"
+    return response

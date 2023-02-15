@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <h1>Upload file</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <lable for="file">Choose file</lable>
+        <input type="file" name="file">
+        <button>Upload file</button>
+    </form>
+    {% if url %}
+        <a href="{{url}}">{url}</a>
+    {% endif %}
+    
+{% endblock %}
