@@ -1,5 +1,0 @@
-venv\scripts\activate - активация виртуального окружения
-python manage.py (makemigrations, migrate, runserver)
-
-REST FULL
-

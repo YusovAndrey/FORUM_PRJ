@@ -1,0 +1,18 @@
+venv\scripts\activate - активация виртуального окружения
+python manage.py (startapp, makemigrations, migrate, runserver)
+
+REST FULL
+
+        pip install djangorestframework
+добавить 'rest_framework' и приложение(api.apps.ApiConfig) в settings 
+создать serializers.py
+    from rest_framework import serializers
+    импортируем model(from api.models import CheckBox)
+    создать сериалайзер - class НазваниеМоделиSerializer(чтобы понятно было) - class CheckBoxSerializer(serializers.ModelSerializer)
+    Внутри используем class Meta:
+        - указываем модель
+        - указываем поля
+        class CheckBoxSerializer(serializers.ModelSerializer)
+            class Meta:
+                model = CheckBox
+                fields = '__all__'
