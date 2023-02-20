@@ -1,10 +1,11 @@
 #from django.shortcuts import render
+from ast import Return
 from copy import error
 from urllib import request
 from api import serializers
 from api.models import CheckBox
 from api.serializers import CheckBoxSerializer, DataSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
@@ -14,6 +15,10 @@ from api.utils import Sum
 class CheckBoxViewSet(viewsets.ModelViewSet):
     queryset = CheckBox.objects.all()
     serializer_class = CheckBoxSerializer
+    @action(detail=False, methods=['get'])
+    def limit(self, req, pk=None):
+        params = req.query_params
+        return Response({"result": params})
 
 class CheckBoxList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = CheckBox.objects.all()
