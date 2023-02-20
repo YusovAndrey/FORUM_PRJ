@@ -138,8 +138,3 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "ricciardodanielf1@gmail.com"
 EMAIL_HOST_PASSWORD = "nkmsnlezdyvomils"
 EMAIL_USE_TLS = True
-
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
-}
