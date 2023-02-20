@@ -1,4 +1,5 @@
-#from django.shortcuts import render
+from asyncio.log import logger
+import logging
 from ast import Return
 from copy import error
 from urllib import request
@@ -12,12 +13,17 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, status, authentication, permissions, generics, mixins
 from api.utils import Sum
 
+logger = logging.getLogger('django')
+
 class CheckBoxViewSet(viewsets.ModelViewSet):
     queryset = CheckBox.objects.all()
     serializer_class = CheckBoxSerializer
     @action(detail=False, methods=['get'])
     def limit(self, req, pk=None):
-        params = req.query_params
+        try:
+            params = req.query_params
+        except Exception as error:
+            logger.warning('params: %s', params)
         return Response({"result": params})
 
 class CheckBoxList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
