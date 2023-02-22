@@ -34,6 +34,3 @@ class Message(models.Model):
 
     def __str__(self):
         return f'{self.body}'
-    
-    #def get_absolute_url(self):
-    #    return reverse("index")

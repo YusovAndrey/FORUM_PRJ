@@ -1,9 +1,7 @@
 import csv
 import datetime
-
 from django.shortcuts import render, redirect
 from django.conf import settings
-from http.client import HTTPResponse
 from service.models import Post, Comment
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView 
 from .forms import PostForm, CommentForm, UserRegisterForm, MessageForm
@@ -16,19 +14,10 @@ from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from importlib.resources import contents
-from forum_prj.settings import EMAIL_HOST
-from django.contrib.auth.forms import UserCreationForm
-
-#def test_func(user):
-#    return user.email.endswith('@mail.com')
 
 def index(req):
     return render(req, 'index.html')
 
-#@login_required
-#@permission_required('user.view_user', raise_exception=True)
-
-#@user_passes_test(test_func)
 def about(req):
     form = MessageForm()
     if req.method == "POST":
@@ -54,12 +43,6 @@ class DetailPostView(DetailView):
     model = Post
     template_name = "detail_post.html"
 
-#class CreatePostView(PermissionRequiredMixin, CreateView):
-#    permission_required = 'service.add_post'
-#    model = Post
-#    template_name = "create_post.html"
-#    form_class = PostForm
-
 @login_required
 @permission_required("service.add_post")
 
@@ -70,9 +53,6 @@ def create_post(req):
         if form.is_valid():
             form.save()
             title = form.cleaned_data.get("title")
-            if title != "POST":
-                messages.error(req, f"Something went wrong")
-                return redirect('index')
             messages.success(req, f"Post '{title}' was created")
             return redirect('index')
     return render(req, "create_post.html", {"form":form})
