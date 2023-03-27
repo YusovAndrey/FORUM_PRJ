@@ -44,7 +44,7 @@ class DetailPostView(DetailView):
     template_name = "detail_post.html"
 
 @login_required
-@permission_required("service.add_post")
+# @permission_required("service.add_post")
 
 def create_post(req):
     form = PostForm
@@ -57,14 +57,14 @@ def create_post(req):
             return redirect('index')
     return render(req, "create_post.html", {"form":form})
 
-class UpdatePostView(PermissionRequiredMixin, UpdateView):
-    permission_required = 'service.change_post'
+class UpdatePostView(LoginRequiredMixin, UpdateView):
+    #permission_required = 'service.change_post'
     model = Post
-    template_name = "create_post.html"
+    template_name = "edit_post.html"
     form_class = PostForm
 
-class DeletePostView(PermissionRequiredMixin, DeleteView):
-    permission_required = 'service.delete_post'
+class DeletePostView(LoginRequiredMixin, DeleteView):
+    #permission_required = 'service.delete_post'
     model = Post
     template_name = "delete_post.html"
     success_url = reverse_lazy('index')
