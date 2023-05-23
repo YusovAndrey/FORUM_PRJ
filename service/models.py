@@ -5,7 +5,7 @@ class Post(models.Model):
 
     title = models.CharField(verbose_name='название', max_length=100)
     description = models.TextField(verbose_name='описание', null=True, blank=True)
-    image = models.ImageField(verbose_name='картинка', null=True, blank=True)
+    image = models.ImageField(verbose_name='Добавить изображение', null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
 

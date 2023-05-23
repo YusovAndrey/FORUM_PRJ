@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'service.apps.ServiceConfig',
     'crispy_forms',
+    'django.forms',
     'rest_framework',
     'api.apps.ApiConfig',
     'drf_yasg',
@@ -130,6 +131,7 @@ LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587

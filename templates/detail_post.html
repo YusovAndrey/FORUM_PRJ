@@ -16,7 +16,7 @@
         <h4>COMMENTS</h4>
         {% for comment in post.comments.all %}
             <p> {{comment.description}} - {{comment.created_at}} </p>
-            <hr>
+    <hr>
         {% endfor %}
     {% endif %}
     <a href="{% url 'add_comment' post.pk %}" class="btn btn-outline-info btn-lg">Add comment</a>
